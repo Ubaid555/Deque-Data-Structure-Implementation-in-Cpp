@@ -4,19 +4,15 @@ using namespace std;
 
 class Deque
 {
-	int data, count = 0, choice = 0;
-	Deque* front = NULL;
-	Deque* rear = NULL;
-	Deque* lptr = NULL;
-	Deque* rptr = NULL;
+	int arr[MAX] = { 0 }, data, choice = 0, top = -1, front = -1, rear = -1;
 public:
 	void makeNull();
 	bool isFull();
 	bool isEmpty();
 	void pushRear();
 	void pushFront();
-	void popFront();
-	void popRear();
+	int popFront();
+	int popRear();
 	void stackDisplay();
 	void queueDisplay();
 	void stack();
@@ -65,12 +61,12 @@ void Deque::dequeMenu()
 	int check = 0;
 	while (check != 4)
 	{
-		system("cls");	
+		system("cls");
 		cout << "\n\t\t\t\t\t\t---> Welcome to Deque Menu <---\n\t\t\t\t\t\t";
 		cout << "\n\t\t\t\t1.Enqueue\n\t\t\t\t";
 		cout << "\n\t\t\t\t2.Dequeue\n\t\t\t\t";
 		cout << "\n\t\t\t\t3.Display\n\t\t\t\t";
-		cout << "\n\t\t\t\t4.Return to MainMenu\n\t\t\t\t";
+		cout << "\n\t\t\t\t4.Exit\n\t\t\t\t";
 		cout << "\n\t\t\t\t Enter Your Choice :: ";
 		cin >> check;
 		switch (check)
@@ -98,20 +94,18 @@ void Deque::dequeMenu()
 					case 1:
 						if (isFull())
 						{
-							cout << "\n\t\t\t\tStack Overflow\n\t\t\t\t";
+							cout << "\n\t\t\t\tQueue Overflow\n\t\t\t\t";
 							system("pause");
 							break;
 						}
 						else
 						{
 							pushRear();
-							rear->rptr = front;
-							front->lptr = rear;
 							choice = 0;
 							while (choice != 2)
 							{
 								system("cls");
-								cout << "\n\t\t\t\t Data Pushed Successfully";
+								cout << "\n\t\t\t\t EnQueue Successfully";
 								if (isFull())
 								{
 									cout << "\n\t\t\t\tNumber of Max items reached\n\n";
@@ -119,37 +113,32 @@ void Deque::dequeMenu()
 									choice = 2;
 									break;
 								}
-								cout << "\n\n\t\t\t\t Press 1 . Push Again ";
+								cout << "\n\n\t\t\t\t Press 1 . EnQueue Again ";
 								cout << "\n\n\t\t\t\t Press 2 . Return Back ";
 								cout << "\n\n\t\t\t\t  Enter Your Choice :: ";
 								cin >> choice;
 								if (choice == 1)
 								{
 									pushRear();
-									rear->rptr = front;
-									front->lptr = rear;
 								}
-
 							}
 						}
 						break;
 					case 2:
 						if (isFull())
 						{
-							cout << "\n\t\t\t\tStack Overflow\n\t\t\t\t";
+							cout << "\n\t\t\t\tQueue Overflow\n\t\t\t\t";
 							system("pause");
 							break;
 						}
 						else
 						{
 							pushFront();
-							rear->rptr = front;
-							front->lptr = rear;
 							choice = 0;
 							while (choice != 2)
 							{
 								system("cls");
-								cout << "\n\t\t\t\t Data Pushed Successfully";
+								cout << "\n\t\t\t\t EnQueue Successfully";
 								if (isFull())
 								{
 									cout << "\n\t\t\t\tNumber of Max items reached\n\n";
@@ -157,17 +146,14 @@ void Deque::dequeMenu()
 									choice = 2;
 									break;
 								}
-								cout << "\n\n\t\t\t\t Press 1 . Push Again ";
+								cout << "\n\n\t\t\t\t Press 1 . EnQueue Again ";
 								cout << "\n\n\t\t\t\t Press 2 . Return Back ";
 								cout << "\n\n\t\t\t\t  Enter Your Choice :: ";
 								cin >> choice;
 								if (choice == 1)
 								{
 									pushFront();
-									rear->rptr = front;
-									front->lptr = rear;
 								}
-
 							}
 						}
 						break;
@@ -183,7 +169,6 @@ void Deque::dequeMenu()
 			}
 			else
 			{
-				choice = 0;
 				system("cls");
 				cout << "\n\t\t\t\t\t\tDeQueue\n\t\t\t\t\t\t";
 				cout << "\n\t\t\t\t1.From Front End\n\t\t\t\t";
@@ -203,25 +188,13 @@ void Deque::dequeMenu()
 					else
 					{
 						popFront();
-						if (isEmpty())
-						{
-							cout << "\n\n\t\t\t\tDeQueue Successfully\n\n";
-							system("pause");
-							break;
-						}
-						else
-						{
-							rear->rptr = front;
-							front->lptr = rear;
-						}
 						choice = 0;
 						while (choice != 2)
 						{
 							system("cls");
-							cout << "\n\n\t\t\t\tDeQueue Successfully\n\n";
-							if (isEmpty())
+							cout << "\n\n\t\t\t\tDeQueue Successfully";
+							if (top == -1)
 							{
-								system("pause");
 								choice = 2;
 								break;
 							}
@@ -232,11 +205,6 @@ void Deque::dequeMenu()
 							if (choice == 1)
 							{
 								popFront();
-								if (rear != NULL)
-								{
-									rear->rptr = front;
-									front->lptr = rear;
-								}
 							}
 						}
 					}
@@ -251,25 +219,13 @@ void Deque::dequeMenu()
 					else
 					{
 						popRear();
-						if (isEmpty())
-						{
-							cout << "\n\n\t\t\t\tDeQueue Successfully\n\n";
-							system("pause");
-							break;
-						}
-						else
-						{
-							rear->rptr = front;
-							front->lptr = rear;
-						}
 						choice = 0;
 						while (choice != 2)
 						{
 							system("cls");
-							cout << "\n\n\t\t\t\tDeQueue Successfully\n\n";
-							if (isEmpty())
+							cout << "\n\n\t\t\t\tDeQueue Successfully";
+							if (top == -1)
 							{
-								system("pause");
 								choice = 2;
 								break;
 							}
@@ -280,11 +236,6 @@ void Deque::dequeMenu()
 							if (choice == 1)
 							{
 								popRear();
-								if (rear != NULL)
-								{
-									rear->rptr = front;
-									front->lptr = rear;
-								}
 							}
 						}
 					}
@@ -311,7 +262,7 @@ void Deque::stack()
 		cout << "\n\t\t\t\t2.Pop\n\t\t\t\t";
 		cout << "\n\t\t\t\t3.Peek\n\t\t\t\t";
 		cout << "\n\t\t\t\t4.Display\n\t\t\t\t";
-		cout << "\n\t\t\t\t5.Return to MainMenu\n\t\t\t\t";
+		cout << "\n\t\t\t\t5.Exit\n\t\t\t\t";
 		cout << "\n\t\t\t\t Enter Your Choice :: ";
 		cin >> sChoice;
 		switch (sChoice)
@@ -363,14 +314,12 @@ void Deque::stack()
 				while (choice != 2)
 				{
 					system("cls");
-					cout << "\n\n\t\t\t\tPop Successfully\n\n";
-					if (isEmpty())
+					cout << "\n\n\t\t\t\tPop Successfully";
+					if (top == -1)
 					{
-						system("pause");
 						choice = 2;
 						break;
 					}
-					cout << "\t\t\t\tItems remaining is ---> " << count;
 					cout << "\n\n\t\t\t\t Press 1 . Pop Again ";
 					cout << "\n\n\t\t\t\t Press 2 . Return Back ";
 					cout << "\n\n\t\t\t\t  Enter Your Choice :: ";
@@ -390,7 +339,7 @@ void Deque::stack()
 			}
 			else
 			{
-				cout << "\n\n\t\t\t\tTop Most Data Item is " << rear->data << "\n\n";
+				cout << "\n\n\t\t\t\tTop Most Data Item is " << arr[rear] << "\n\n";
 				system("pause");
 			}
 			break;
@@ -413,7 +362,7 @@ void Deque::queue()
 		cout << "\n\t\t\t\t1.EnQueue\n\t\t\t\t";
 		cout << "\n\t\t\t\t2.DeQueue\n\t\t\t\t";
 		cout << "\n\t\t\t\t3.Display\n\t\t\t\t";
-		cout << "\n\t\t\t\t4.Return to MainMenu\n\t\t\t\t";
+		cout << "\n\t\t\t\t4.Exit\n\t\t\t\t";
 		cout << "\n\t\t\t\t Enter Your Choice :: ";
 		cin >> qChoice;
 		switch (qChoice)
@@ -428,8 +377,6 @@ void Deque::queue()
 			else
 			{
 				pushRear();
-				rear->rptr = front;
-				front->lptr = rear;
 				choice = 0;
 				while (choice != 2)
 				{
@@ -449,8 +396,6 @@ void Deque::queue()
 					if (choice == 1)
 					{
 						pushRear();
-						rear->rptr = front;
-						front->lptr = rear;
 					}
 				}
 			}
@@ -465,25 +410,13 @@ void Deque::queue()
 			else
 			{
 				popFront();
-				if (rear == NULL)
-				{
-					cout << "\n\n\t\t\t\tDeQueue Successfully\n\n";
-					system("pause");
-					break;
-				}
-				else
-				{
-					rear->rptr = front;
-					front->lptr = rear;
-				}
 				choice = 0;
 				while (choice != 2)
 				{
 					system("cls");
-					cout << "\n\n\t\t\t\tDeQueue Successfully\n\n";
-					if (isEmpty())
+					cout << "\n\n\t\t\t\tDeQueue Successfully";
+					if (top == -1)
 					{
-						system("pause");
 						choice = 2;
 						break;
 					}
@@ -494,11 +427,6 @@ void Deque::queue()
 					if (choice == 1)
 					{
 						popFront();
-						if (rear != NULL)
-						{
-							rear->rptr = front;
-							front->lptr = rear;
-						}
 					}
 				}
 			}
@@ -510,34 +438,27 @@ void Deque::queue()
 	}
 }
 
-bool Deque::isEmpty()
+void Deque::makeNull()
 {
-	if (count == 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	arr[0] = {}, choice = 0, top = -1, front = -1, rear = -1;
 }
 
 bool Deque::isFull()
 {
-	if (count == MAX)
+	if (top == MAX - 1)
+		return true;
+	else
+		return false;
+}
+
+bool Deque::isEmpty()
+{
+	if (top == -1)
 	{
 		return true;
 	}
 	else
-	{
 		return false;
-	}
-}
-
-void Deque::makeNull()
-{
-	data, count = 0, choice = 0;
-	front = NULL, rear = NULL, lptr = NULL, rptr = NULL;
 }
 
 void Deque::pushRear()
@@ -549,21 +470,23 @@ void Deque::pushRear()
 	}
 	else
 	{
-		Deque* newQueue = new Deque;
 		cout << "\n\t\t\tEnter Data :: ";
-		cin >> newQueue->data;
+		cin >> data;
 		if (isEmpty())
 		{
-			front = newQueue;
-			rear = newQueue;
+			front = 0;
+			rear = 0;
+		}
+		else if (front > 0  && rear == MAX-1)
+		{
+			rear = 0;
 		}
 		else
 		{
-			rear->rptr = newQueue;
-			newQueue->lptr = rear;
-			rear = newQueue;
+			rear = rear++;
 		}
-		count++;
+		arr[rear] = data;
+		top++;
 	}
 }
 
@@ -576,66 +499,64 @@ void Deque::pushFront()
 	}
 	else
 	{
-		Deque* newQueue = new Deque;
 		cout << "\n\t\t\tEnter Data :: ";
-		cin >> newQueue->data;
+		cin >> data;
 		if (isEmpty())
 		{
-			front = newQueue;
-			rear = newQueue;
+			front = 0;
+			rear = 0;
+			arr[front] = data;
+		}
+		else if (front == 0 && rear < MAX - 1)
+		{
+			for (int i = rear; i >= front; i--)
+			{
+				arr[i + 1] = arr[i];
+			}
+			arr[front] = data;
+			rear++;
 		}
 		else
 		{
-			front->lptr = newQueue;
-			newQueue->rptr = front;
-			front = newQueue;
+			front--;
+			arr[front] = data;
 		}
-		count++;
+		top++;
 	}
 }
 
-void Deque::popFront()
+int Deque::popFront()
 {
-	if (isEmpty())
+	int b;
+	if (front == rear)
 	{
-		cout << "\n\t\t\t\tQueue underflow\n\t\t\t\t";
-		system("pause");
+		b = front;
+		front = rear = -1;
 	}
 	else
 	{
-		if (rear == front)
-		{
-			front = rear = NULL;
-		}
-		else
-		{
-			front = front->rptr;
-			front->lptr = NULL;
-		}
-		count--;
+		b = front;
+		front = front++;
 	}
+	top--;
+	return b;
 }
 
-void Deque::popRear()
+int Deque::popRear()
 {
-	if (isEmpty())
+	int c;
+	if (front == rear)
 	{
-		cout << "\n\t\t\t\tQueue underflow\n\t\t\t\t";
-		system("pause");
+		c = front;
+		front = rear = -1;
 	}
 	else
 	{
-		if (rear == front)
-		{
-			front = rear = NULL;
-		}
-		else
-		{
-			rear = rear->lptr;
-			rear->rptr = NULL;
-		}
-		count--;
+		c = rear;
+		rear = rear--;
 	}
+	top--;
+	return c;
 }
 
 void Deque::stackDisplay()
@@ -643,20 +564,17 @@ void Deque::stackDisplay()
 	if (isEmpty())
 	{
 		cout << "\n\n\t\t\tStack underflow\n\n";
-		system("pause");
 	}
 	else
 	{
-		Deque* temp = rear;
 		system("cls");
 		cout << "\n\n\t\t\tTop ---> ";
-		while (temp != NULL)
+		for (int i = rear; i >= front; i--)
 		{
-			cout << temp->data << "\n\n\t\t\t\t ";
-			temp = temp->lptr;
+			cout << arr[i] << "\n\n\t\t\t\t ";
 		}
-		system("pause");
 	}
+	system("pause");
 }
 
 void Deque::queueDisplay()
@@ -667,16 +585,28 @@ void Deque::queueDisplay()
 	}
 	else
 	{
-		Deque* temp = front;
-		int c = 0;
-		cout << "\n\n\t\t\t Front  ";
-		while (c != count)
+		if (rear>=front)
 		{
-			cout << " ---> " << temp->data;
-			temp = temp->rptr;
-			c++;
+			cout << "\n\n\t\t\t Front --->   ";
+			for (int i = front; i <= rear; i++)
+			{
+				cout << arr[i] << "  ";
+			}
+			cout << " <--- Rear\n\n";
 		}
-		cout << "   <--- Rear\n\n";
+		else
+		{
+			cout << "\n\n\t\t\t Front --->   ";
+			for (int i = front; i <= MAX-1; i++)
+			{
+				cout << arr[i] << "  ";
+			}
+			for (int i = 0; i <= rear; i++)
+			{
+				cout << arr[i] << "  ";
+			}
+			cout << " <--- Rear\n\n";
+		}
 	}
 	system("pause");
 }
